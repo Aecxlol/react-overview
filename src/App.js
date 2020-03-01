@@ -1,26 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Client from "./components/Client";
+import ClientForm from "./components/ClientForm";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+    state = {
+        clients: [
+            {id: 1, nom: "Damien"},
+            {id: 2, nom: "Mounga"},
+            {id: 3, nom: "Laurent"}
+        ]
+    };
+
+    handleDelete = (id) => {
+        const CLIENTS = [...this.state.clients];
+        const INDEX   = CLIENTS.findIndex((client) => {
+            return client.id === id;
+        });
+        CLIENTS.splice(INDEX, 1);
+        this.setState({clients: CLIENTS});
+    };
+
+    handleAdd = (client) => {
+        const CLIENTS = [...this.state.clients];
+        CLIENTS.push(client);
+        this.setState({clients: CLIENTS});
+    };
+
+
+    render() {
+        const TITLE = "Liste des clients";
+
+        return (
+            <div>
+                <h1>{TITLE}</h1>
+                <ul>
+                    {this.state.clients.map((client) => (
+                        <Client details={client} onDelete={this.handleDelete}/>
+                    ))}
+                </ul>
+                <ClientForm onClientAdd={this.handleAdd}/>
+            </div>
+        )
+    }
 }
 
 export default App;
